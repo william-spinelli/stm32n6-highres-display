@@ -52,7 +52,6 @@ XSPI_HandleTypeDef hxspi2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_HPDMA1_Init(void);
 static void MX_XSPI1_Init(void);
 static void MX_XSPI2_Init(void);
 static void MX_BSEC_Init(void);
@@ -98,7 +97,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_HPDMA1_Init();
   MX_XSPI1_Init();
   MX_XSPI2_Init();
   MX_BSEC_Init();
@@ -221,9 +219,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL4.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL4.PLLM = 6;
-  RCC_OscInitStruct.PLL4.PLLN = 250;
+  RCC_OscInitStruct.PLL4.PLLN = 145;
   RCC_OscInitStruct.PLL4.PLLFractional = 0;
-  RCC_OscInitStruct.PLL4.PLLP1 = 2;
+  RCC_OscInitStruct.PLL4.PLLP1 = 4;
   RCC_OscInitStruct.PLL4.PLLP2 = 1;
 
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -277,30 +275,6 @@ static void MX_BSEC_Init(void)
   /* USER CODE BEGIN BSEC_Init 2 */
 
   /* USER CODE END BSEC_Init 2 */
-
-}
-
-/**
-  * @brief HPDMA1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_HPDMA1_Init(void)
-{
-
-  /* USER CODE BEGIN HPDMA1_Init 0 */
-
-  /* USER CODE END HPDMA1_Init 0 */
-
-  /* Peripheral clock enable */
-  __HAL_RCC_HPDMA1_CLK_ENABLE();
-
-  /* USER CODE BEGIN HPDMA1_Init 1 */
-
-  /* USER CODE END HPDMA1_Init 1 */
-  /* USER CODE BEGIN HPDMA1_Init 2 */
-
-  /* USER CODE END HPDMA1_Init 2 */
 
 }
 

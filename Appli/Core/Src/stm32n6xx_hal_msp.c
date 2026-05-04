@@ -290,8 +290,8 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* hltdc)
   */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
     PeriphClkInitStruct.LtdcClockSelection = RCC_LTDCCLKSOURCE_IC16;
-    PeriphClkInitStruct.ICSelection[RCC_IC16].ClockSelection = RCC_ICCLKSOURCE_PLL2;
-    PeriphClkInitStruct.ICSelection[RCC_IC16].ClockDivider = 24;
+    PeriphClkInitStruct.ICSelection[RCC_IC16].ClockSelection = RCC_ICCLKSOURCE_PLL4;
+    PeriphClkInitStruct.ICSelection[RCC_IC16].ClockDivider = 4;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
       Error_Handler();

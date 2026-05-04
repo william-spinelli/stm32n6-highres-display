@@ -56,7 +56,7 @@ LTDC_HandleTypeDef hltdc;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-// #define USE_RIVERDI_DISPLAY
+#define USE_RIVERDI_DISPLAY
 
 #ifdef USE_RIVERDI_DISPLAY
   #define SCREEN_WIDTH 1280
@@ -124,7 +124,6 @@ void ili2132_touchpad_read(void);
 /* Private function prototypes -----------------------------------------------*/
 static void MPU_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_HPDMA1_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_GPU2D_Init(void);
 static void MX_I2C2_Init(void);
@@ -194,7 +193,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_HPDMA1_Init();
   MX_DMA2D_Init();
   MX_GPU2D_Init();
   MX_I2C2_Init();
@@ -216,16 +214,16 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_Delay(33);
 
-    bool pressed = false;
-    int16_t x = 0;
-    int16_t y = 0;
-  #ifdef USE_RIVERDI_DISPLAY
-    ili2132_touchpad_read();
-  #else
-    gt911_touchpad_read(&pressed, &x, &y);
-  #endif
-    if (pressed)
-      draw_cross(x, y, 30, 2);
+//    bool pressed = false;
+//    int16_t x = 0;
+//    int16_t y = 0;
+//  #ifdef USE_RIVERDI_DISPLAY
+//    ili2132_touchpad_read();
+//  #else
+//    gt911_touchpad_read(&pressed, &x, &y);
+//  #endif
+//    if (pressed)
+//      draw_cross(x, y, 30, 2);
   }
   /* USER CODE END 3 */
 }
@@ -290,30 +288,6 @@ static void MX_GPU2D_Init(void)
   /* USER CODE BEGIN GPU2D_Init 2 */
 
   /* USER CODE END GPU2D_Init 2 */
-
-}
-
-/**
-  * @brief HPDMA1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_HPDMA1_Init(void)
-{
-
-  /* USER CODE BEGIN HPDMA1_Init 0 */
-
-  /* USER CODE END HPDMA1_Init 0 */
-
-  /* Peripheral clock enable */
-  __HAL_RCC_HPDMA1_CLK_ENABLE();
-
-  /* USER CODE BEGIN HPDMA1_Init 1 */
-
-  /* USER CODE END HPDMA1_Init 1 */
-  /* USER CODE BEGIN HPDMA1_Init 2 */
-
-  /* USER CODE END HPDMA1_Init 2 */
 
 }
 
@@ -415,14 +389,14 @@ static void MX_LTDC_Init(void)
   hltdc.Init.VSPolarity = LTDC_VSPOLARITY_AL;
   hltdc.Init.DEPolarity = LTDC_DEPOLARITY_AL;
   hltdc.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
-  hltdc.Init.HorizontalSync = 4;
-  hltdc.Init.VerticalSync = 4;
-  hltdc.Init.AccumulatedHBP = 12;
-  hltdc.Init.AccumulatedVBP = 12;
-  hltdc.Init.AccumulatedActiveW = 812;
-  hltdc.Init.AccumulatedActiveH = 492;
-  hltdc.Init.TotalWidth = 820;
-  hltdc.Init.TotalHeigh = 506;
+  hltdc.Init.HorizontalSync = 0;
+  hltdc.Init.VerticalSync = 0;
+  hltdc.Init.AccumulatedHBP = 88;
+  hltdc.Init.AccumulatedVBP = 23;
+  hltdc.Init.AccumulatedActiveW = 1368;
+  hltdc.Init.AccumulatedActiveH = 823;
+  hltdc.Init.TotalWidth = 1440;
+  hltdc.Init.TotalHeigh = 838;
   hltdc.Init.Backcolor.Blue = 0;
   hltdc.Init.Backcolor.Green = 0;
   hltdc.Init.Backcolor.Red = 0;
@@ -494,8 +468,6 @@ static void MX_LTDC_Init(void)
   HAL_RIF_RISC_SetSlaveSecureAttributes(RIF_RISC_PERIPH_INDEX_LTDCL1 , RIF_ATTRIBUTE_SEC | RIF_ATTRIBUTE_PRIV);
 
   /* RIF-Aware IPs Config */
-
-  /* set up HPDMA configuration */
 
   /* set up PWR configuration */
   HAL_PWR_ConfigAttributes(PWR_ITEM_WKUP1,PWR_SEC_NPRIV);
