@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "CubeMX_STM32N6 - App",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Appli/Core/Inc",
+                "${workspaceFolder}/Drivers/STM32N6xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/STM32N6xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32N6xx/Include",
+                "${workspaceFolder}/Drivers/CMSIS/Include"
+                // "${workspaceFolder}/STM32CubeIDE/Appli/hal_stm_lvgl",
+                // "${workspaceFolder}/STM32CubeIDE/Appli/lvgl"
+            ],
+            "defines": [
+                "USE_HAL_DRIVER",
+                "STM32N657xx"
+            ],
+            "compilerPath": "C:/ST/STM32CubeCLT_1.21.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc.exe",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}
