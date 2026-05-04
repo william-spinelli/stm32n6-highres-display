@@ -23,6 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -57,7 +59,56 @@ DMA_HandleTypeDef handle_HPDMA1_Channel0;
 
 LTDC_HandleTypeDef hltdc;
 
+UART_HandleTypeDef huart1;
+
 /* USER CODE BEGIN PV */
+// #define USE_RIVERDI_DISPLAY
+
+#ifdef USE_RIVERDI_DISPLAY
+  #define SCREEN_WIDTH 1280
+  #define SCREEN_HEIGHT 800
+#else
+  #define SCREEN_WIDTH 800
+  #define SCREEN_HEIGHT 480
+#endif
+
+#define FRAMEBUFFER_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
+static uint8_t framebuffer[FRAMEBUFFER_SIZE] __attribute__((aligned(4))) __attribute__((section("Framebuffer")));
+
+
+void init_framebuffer(void)
+{
+  memset(framebuffer, 0x77, FRAMEBUFFER_SIZE);
+  // for (uint32_t i = 0; i < 2; ++i)
+  // {
+  //   for (int i = i + 1; j < FRAMEBUFFER_SIZE / 2; j += 2)
+  //     dummy_framebuffer[i][j] = 0x18;
+  //   for (int j = i + FRAMEBUFFER_SIZE / 2 + 1; j < FRAMEBUFFER_SIZE; j += 2)
+  //     dummy_framebuffer[i][j] = 0x24;
+  // }
+
+  // for (uint32_t i = 0; i < 2; ++i)
+  // {
+  //   for (int j = i + 1; j < FRAMEBUFFER_SIZE / 2; j += 2)
+  //     dummy_framebuffer[i][j] = 0x18;
+  //   for (int j = i + FRAMEBUFFER_SIZE / 2 + 1; j < FRAMEBUFFER_SIZE; j += 2)
+  //     dummy_framebuffer[i][j] = 0x24;
+  // }
+
+  // for (uint8_t i = 0; i < 1000; ++i)
+  // {
+  //   static uint8_t index = 0;
+  //   layerCfg.Backcolor.Blue ^= 0xF5;
+  //   layerCfg.Backcolor.Green ^= 0xFE;
+  //   layerCfg.Backcolor.Red ^= 0xB1;
+  //   HAL_LTDC_ConfigLayer_NoReload(&hltdc, &layerCfg, 0);
+    HAL_LTDC_SetAddress_NoReload(&hltdc, (uint32_t)(uintptr_t)framebuffer, 0);
+    HAL_LTDC_Reload(&hltdc, LTDC_RELOAD_VERTICAL_BLANKING);
+  //   index ^= 0x01;
+  //   HAL_Delay(1000);
+  //   HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);
+  // }
+}
 
 /* USER CODE END PV */
 
@@ -73,6 +124,7 @@ static void MX_GPU2D_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_ICACHE_Init(void);
 static void MX_LTDC_Init(void);
+static void MX_USART1_UART_Init(void);
 static void SystemIsolation_Config(void);
 /* USER CODE BEGIN PFP */
 static void Enable_NPU_RAM_ForCore(void);
@@ -82,7 +134,10 @@ static void Enable_VENCRAM_ForCore(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int __io_putchar(int ch) {
+    HAL_UART_Transmit(&huart1, (uint8_t*)&ch, 1, 100);
+    return ch;
+}
 /* USER CODE END 0 */
 
 /**
@@ -98,7 +153,7 @@ int main(void)
   Enable_AXICACHE_RAM_ForCore(); // access to 0x343C0000 - 0x343FFFFF
   Enable_VENCRAM_ForCore();      // access to 0x34400000 - 0x3441FFFF
 
-  // loop that can be used to catch a crashing application for debug. 
+  // loop that can be used to catch a crashing application for debug.
   // Set debugFlag to 1, build, flash and run target as normally.
   // Connect to running target, then change debugFlag value from watch.
   static volatile int debugFlag = 0;
@@ -141,21 +196,23 @@ int main(void)
   MX_I2C2_Init();
   MX_ICACHE_Init();
   MX_LTDC_Init();
+  MX_USART1_UART_Init();
   MX_TouchGFX_Init();
   SystemIsolation_Config();
   /* Call PreOsInit function */
-  MX_TouchGFX_PreOSInit();
+//   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
+  init_framebuffer();
 
   /* USER CODE END 2 */
 
   /* Init scheduler */
-  osKernelInitialize();
+//   osKernelInitialize();
   /* Call init function for freertos objects (in app_freertos.c) */
-  MX_FREERTOS_Init();
+//   MX_FREERTOS_Init();
 
   /* Start scheduler */
-  osKernelStart();
+//   osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
 
@@ -164,7 +221,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    HAL_Delay(1000);
+    printf("Tock\n");
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -534,6 +592,8 @@ static void MX_LTDC_Init(void)
   HAL_GPIO_ConfigPinAttributes(GPIOD,GPIO_PIN_14,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
   HAL_GPIO_ConfigPinAttributes(GPIOD,GPIO_PIN_15,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
   HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_1,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
+  HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_5,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
+  HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_6,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
   HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_9,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
   HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_11,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
   HAL_GPIO_ConfigPinAttributes(GPIOF,GPIO_PIN_4,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
@@ -592,6 +652,54 @@ static void MX_LTDC_Init(void)
   /* USER CODE BEGIN RIF_Init 2 */
 
   /* USER CODE END RIF_Init 2 */
+
+}
+
+/**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
 
 }
 
@@ -704,7 +812,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 static void Enable_NPU_RAM_ForCore(void)
-{    
+{
   RAMCFG_HandleTypeDef hramcfg  = {0};
 
   /* Power On AXSRAM3 to AXISRAM6 */

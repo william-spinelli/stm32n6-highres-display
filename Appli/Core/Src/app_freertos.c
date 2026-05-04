@@ -19,6 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "app_freertos.h"
+#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -135,6 +136,9 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     osDelay(1);
+    static uint8_t count = 0;
+    if (++count == 0)
+        printf("Tock\n");
   }
   /* USER CODE END defaultTask */
 }

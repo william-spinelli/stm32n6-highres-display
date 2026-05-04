@@ -71,7 +71,7 @@ SECTIONS
 {
   BufferSection (NOLOAD) :
   {
-    *(TouchGFX_Framebuffer TouchGFX_Framebuffer.*)
+    *(TouchGFX_Framebuffer TouchGFX_Framebuffer.* Framebuffer)
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
 
@@ -79,14 +79,14 @@ SECTIONS
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
   } >FB_RAM
-  
+
   UncachedSection (NOLOAD) :
   {
     *(Nemagfx_Memory_Pool_Buffer Nemagfx_Memory_Pool_Buffer.*)
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
   } >CMDLIST_RAM
-  
+
   FontFlashSection :
   {
     *(FontFlashSection FontFlashSection.*)
