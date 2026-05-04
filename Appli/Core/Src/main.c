@@ -18,8 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os2.h"
-#include "app_touchgfx.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -47,17 +45,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-CRC_HandleTypeDef hcrc;
-
 DMA2D_HandleTypeDef hdma2d;
 
 GPU2D_HandleTypeDef hgpu2d;
 
 I2C_HandleTypeDef hi2c2;
-
-JPEG_HandleTypeDef hjpeg;
-DMA_HandleTypeDef handle_HPDMA1_Channel1;
-DMA_HandleTypeDef handle_HPDMA1_Channel0;
 
 LTDC_HandleTypeDef hltdc;
 
@@ -87,40 +79,13 @@ static uint8_t framebuffer[FRAMEBUFFER_SIZE] __attribute__((aligned(4))) __attri
 static void init_framebuffer(void)
 {
   memcpy(framebuffer, sample_image, FRAMEBUFFER_SIZE);
-  // for (uint32_t i = 0; i < 2; ++i)
-  // {
-  //   for (int i = i + 1; j < FRAMEBUFFER_SIZE / 2; j += 2)
-  //     dummy_framebuffer[i][j] = 0x18;
-  //   for (int j = i + FRAMEBUFFER_SIZE / 2 + 1; j < FRAMEBUFFER_SIZE; j += 2)
-  //     dummy_framebuffer[i][j] = 0x24;
-  // }
-
-  // for (uint32_t i = 0; i < 2; ++i)
-  // {
-  //   for (int j = i + 1; j < FRAMEBUFFER_SIZE / 2; j += 2)
-  //     dummy_framebuffer[i][j] = 0x18;
-  //   for (int j = i + FRAMEBUFFER_SIZE / 2 + 1; j < FRAMEBUFFER_SIZE; j += 2)
-  //     dummy_framebuffer[i][j] = 0x24;
-  // }
-
-  // for (uint8_t i = 0; i < 1000; ++i)
-  // {
-  //   static uint8_t index = 0;
-  //   layerCfg.Backcolor.Blue ^= 0xF5;
-  //   layerCfg.Backcolor.Green ^= 0xFE;
-  //   layerCfg.Backcolor.Red ^= 0xB1;
-  //   HAL_LTDC_ConfigLayer_NoReload(&hltdc, &layerCfg, 0);
-    HAL_LTDC_SetAddress_NoReload(&hltdc, (uint32_t)(uintptr_t)framebuffer, 0);
-    HAL_LTDC_Reload(&hltdc, LTDC_RELOAD_VERTICAL_BLANKING);
-  //   index ^= 0x01;
-  //   HAL_Delay(1000);
-  //   HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);
-  // }
+  HAL_LTDC_SetAddress_NoReload(&hltdc, (uint32_t)(uintptr_t)framebuffer, 0);
+  HAL_LTDC_Reload(&hltdc, LTDC_RELOAD_VERTICAL_BLANKING);
 }
 
 static void draw_cross(int16_t cx, int16_t cy, int16_t size, int16_t thickness)
 {
-  const uint16_t color = 0x0000;
+  const uint16_t color = 0xFFE0;
   uint16_t *fb = (uint16_t *)(void *)framebuffer;
 
   int16_t half   = size / 2;
@@ -151,7 +116,6 @@ static void draw_cross(int16_t cx, int16_t cy, int16_t size, int16_t thickness)
   }
 }
 
-
 void gt911_touchpad_read(bool *pressed, int16_t *x, int16_t *y);
 void ili2132_touchpad_read(void);
 
@@ -159,11 +123,8 @@ void ili2132_touchpad_read(void);
 
 /* Private function prototypes -----------------------------------------------*/
 static void MPU_Config(void);
-void MX_FREERTOS_Init(void);
 static void MX_GPIO_Init(void);
 static void MX_HPDMA1_Init(void);
-static void MX_JPEG_Init(void);
-static void MX_CRC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_GPU2D_Init(void);
 static void MX_I2C2_Init(void);
@@ -234,38 +195,25 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_HPDMA1_Init();
-  MX_JPEG_Init();
-  MX_CRC_Init();
   MX_DMA2D_Init();
   MX_GPU2D_Init();
   MX_I2C2_Init();
   MX_ICACHE_Init();
   MX_LTDC_Init();
   MX_USART1_UART_Init();
-  MX_TouchGFX_Init();
   SystemIsolation_Config();
-  /* Call PreOsInit function */
-//   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
   init_framebuffer();
 
   /* USER CODE END 2 */
-
-  /* Init scheduler */
-//   osKernelInitialize();
-  /* Call init function for freertos objects (in app_freertos.c) */
-//   MX_FREERTOS_Init();
-
-  /* Start scheduler */
-//   osKernelStart();
-
-  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
     HAL_Delay(33);
 
     bool pressed = false;
@@ -278,44 +226,8 @@ int main(void)
   #endif
     if (pressed)
       draw_cross(x, y, 30, 2);
-    else
-    {
-
-    }
-    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-}
-
-/**
-  * @brief CRC Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_CRC_Init(void)
-{
-
-  /* USER CODE BEGIN CRC_Init 0 */
-
-  /* USER CODE END CRC_Init 0 */
-
-  /* USER CODE BEGIN CRC_Init 1 */
-
-  /* USER CODE END CRC_Init 1 */
-  hcrc.Instance = CRC;
-  hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
-  hcrc.Init.DefaultInitValueUse = DEFAULT_INIT_VALUE_ENABLE;
-  hcrc.Init.InputDataInversionMode = CRC_INPUTDATA_INVERSION_NONE;
-  hcrc.Init.OutputDataInversionMode = CRC_OUTPUTDATA_INVERSION_DISABLE;
-  hcrc.InputDataFormat = CRC_INPUTDATA_FORMAT_BYTES;
-  if (HAL_CRC_Init(&hcrc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN CRC_Init 2 */
-
-  /* USER CODE END CRC_Init 2 */
-
 }
 
 /**
@@ -395,12 +307,6 @@ static void MX_HPDMA1_Init(void)
 
   /* Peripheral clock enable */
   __HAL_RCC_HPDMA1_CLK_ENABLE();
-
-  /* HPDMA1 interrupt Init */
-    HAL_NVIC_SetPriority(HPDMA1_Channel0_IRQn, 6, 0);
-    HAL_NVIC_EnableIRQ(HPDMA1_Channel0_IRQn);
-    HAL_NVIC_SetPriority(HPDMA1_Channel1_IRQn, 7, 0);
-    HAL_NVIC_EnableIRQ(HPDMA1_Channel1_IRQn);
 
   /* USER CODE BEGIN HPDMA1_Init 1 */
 
@@ -484,32 +390,6 @@ static void MX_ICACHE_Init(void)
   /* USER CODE BEGIN ICACHE_Init 2 */
 
   /* USER CODE END ICACHE_Init 2 */
-
-}
-
-/**
-  * @brief JPEG Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_JPEG_Init(void)
-{
-
-  /* USER CODE BEGIN JPEG_Init 0 */
-
-  /* USER CODE END JPEG_Init 0 */
-
-  /* USER CODE BEGIN JPEG_Init 1 */
-
-  /* USER CODE END JPEG_Init 1 */
-  hjpeg.Instance = JPEG;
-  if (HAL_JPEG_Init(&hjpeg) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN JPEG_Init 2 */
-
-  /* USER CODE END JPEG_Init 2 */
 
 }
 
@@ -616,16 +496,6 @@ static void MX_LTDC_Init(void)
   /* RIF-Aware IPs Config */
 
   /* set up HPDMA configuration */
-  /* set HPDMA1 channel 0 used by JPEG */
-  if (HAL_DMA_ConfigChannelAttributes(&handle_HPDMA1_Channel0,DMA_CHANNEL_SEC|DMA_CHANNEL_PRIV|DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC)!= HAL_OK )
-  {
-    Error_Handler();
-  }
-  /* set HPDMA1 channel 1 used by JPEG */
-  if (HAL_DMA_ConfigChannelAttributes(&handle_HPDMA1_Channel1,DMA_CHANNEL_SEC|DMA_CHANNEL_PRIV|DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC)!= HAL_OK )
-  {
-    Error_Handler();
-  }
 
   /* set up PWR configuration */
   HAL_PWR_ConfigAttributes(PWR_ITEM_WKUP1,PWR_SEC_NPRIV);

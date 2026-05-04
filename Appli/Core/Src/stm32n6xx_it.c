@@ -57,9 +57,6 @@
 /* External variables --------------------------------------------------------*/
 extern DMA2D_HandleTypeDef hdma2d;
 extern GPU2D_HandleTypeDef hgpu2d;
-extern DMA_HandleTypeDef handle_HPDMA1_Channel1;
-extern DMA_HandleTypeDef handle_HPDMA1_Channel0;
-extern JPEG_HandleTypeDef hjpeg;
 extern LTDC_HandleTypeDef hltdc;
 extern TIM_HandleTypeDef htim2;
 
@@ -161,6 +158,19 @@ void SecureFault_Handler(void)
 }
 
 /**
+  * @brief This function handles System service call via SWI instruction.
+  */
+void SVC_Handler(void)
+{
+  /* USER CODE BEGIN SVCall_IRQn 0 */
+
+  /* USER CODE END SVCall_IRQn 0 */
+  /* USER CODE BEGIN SVCall_IRQn 1 */
+
+  /* USER CODE END SVCall_IRQn 1 */
+}
+
+/**
   * @brief This function handles Debug monitor.
   */
 void DebugMon_Handler(void)
@@ -171,6 +181,33 @@ void DebugMon_Handler(void)
   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
 
   /* USER CODE END DebugMonitor_IRQn 1 */
+}
+
+/**
+  * @brief This function handles Pendable request for system service.
+  */
+void PendSV_Handler(void)
+{
+  /* USER CODE BEGIN PendSV_IRQn 0 */
+
+  /* USER CODE END PendSV_IRQn 0 */
+  /* USER CODE BEGIN PendSV_IRQn 1 */
+
+  /* USER CODE END PendSV_IRQn 1 */
+}
+
+/**
+  * @brief This function handles System tick timer.
+  */
+void SysTick_Handler(void)
+{
+  /* USER CODE BEGIN SysTick_IRQn 0 */
+
+  /* USER CODE END SysTick_IRQn 0 */
+
+  /* USER CODE BEGIN SysTick_IRQn 1 */
+
+  /* USER CODE END SysTick_IRQn 1 */
 }
 
 /******************************************************************************/
@@ -206,20 +243,6 @@ void DMA2D_IRQHandler(void)
   /* USER CODE BEGIN DMA2D_IRQn 1 */
 
   /* USER CODE END DMA2D_IRQn 1 */
-}
-
-/**
-  * @brief This function handles JPEG global interrupt.
-  */
-void JPEG_IRQHandler(void)
-{
-  /* USER CODE BEGIN JPEG_IRQn 0 */
-
-  /* USER CODE END JPEG_IRQn 0 */
-  HAL_JPEG_IRQHandler(&hjpeg);
-  /* USER CODE BEGIN JPEG_IRQn 1 */
-
-  /* USER CODE END JPEG_IRQn 1 */
 }
 
 /**
@@ -262,34 +285,6 @@ void ICACHE_IRQHandler(void)
   /* USER CODE BEGIN ICACHE_IRQn 1 */
 
   /* USER CODE END ICACHE_IRQn 1 */
-}
-
-/**
-  * @brief This function handles HPDMA1 Channel 0 global interrupt.
-  */
-void HPDMA1_Channel0_IRQHandler(void)
-{
-  /* USER CODE BEGIN HPDMA1_Channel0_IRQn 0 */
-
-  /* USER CODE END HPDMA1_Channel0_IRQn 0 */
-  HAL_DMA_IRQHandler(&handle_HPDMA1_Channel0);
-  /* USER CODE BEGIN HPDMA1_Channel0_IRQn 1 */
-
-  /* USER CODE END HPDMA1_Channel0_IRQn 1 */
-}
-
-/**
-  * @brief This function handles HPDMA1 Channel 1 global interrupt.
-  */
-void HPDMA1_Channel1_IRQHandler(void)
-{
-  /* USER CODE BEGIN HPDMA1_Channel1_IRQn 0 */
-
-  /* USER CODE END HPDMA1_Channel1_IRQn 0 */
-  HAL_DMA_IRQHandler(&handle_HPDMA1_Channel1);
-  /* USER CODE BEGIN HPDMA1_Channel1_IRQn 1 */
-
-  /* USER CODE END HPDMA1_Channel1_IRQn 1 */
 }
 
 /**

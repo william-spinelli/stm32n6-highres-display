@@ -36,7 +36,7 @@ extern "C" {
 #define HAL_MODULE_ENABLED
 /*#define HAL_ADC_MODULE_ENABLED   */
 /*#define HAL_BSEC_MODULE_ENABLED   */
-#define HAL_CRC_MODULE_ENABLED
+/*#define HAL_CRC_MODULE_ENABLED   */
 /*#define HAL_CRYP_MODULE_ENABLED   */
 /*#define HAL_DCMI_MODULE_ENABLED   */
 /*#define HAL_DCMIPP_MODULE_ENABLED   */
@@ -55,7 +55,7 @@ extern "C" {
 #define HAL_ICACHE_MODULE_ENABLED
 /*#define HAL_IRDA_MODULE_ENABLED   */
 /*#define HAL_IWDG_MODULE_ENABLED   */
-#define HAL_JPEG_MODULE_ENABLED
+/*#define HAL_JPEG_MODULE_ENABLED   */
 /*#define HAL_LPTIM_MODULE_ENABLED   */
 #define HAL_LTDC_MODULE_ENABLED
 /*#define HAL_MCE_MODULE_ENABLED   */
@@ -153,7 +153,7 @@ extern "C" {
   * @brief This is the HAL system configuration section
   */
 #define  VDD_VALUE                  3300UL /*!< Value of VDD in mv */
-#define  TICK_INT_PRIORITY          4U  /*!< tick interrupt priority */
+#define  TICK_INT_PRIORITY          15U  /*!< tick interrupt priority (lowest by default) */
 #define  USE_RTOS                   0U
 
 /* ########################## Assert Selection ############################## */

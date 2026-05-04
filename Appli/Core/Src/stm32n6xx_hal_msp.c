@@ -22,9 +22,6 @@
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
-extern DMA_HandleTypeDef handle_HPDMA1_Channel1;
-
-extern DMA_HandleTypeDef handle_HPDMA1_Channel0;
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
@@ -88,51 +85,6 @@ void HAL_MspInit(void)
   /* USER CODE BEGIN MspInit 1 */
 
   /* USER CODE END MspInit 1 */
-}
-
-/**
-  * @brief CRC MSP Initialization
-  * This function configures the hardware resources used in this example
-  * @param hcrc: CRC handle pointer
-  * @retval None
-  */
-void HAL_CRC_MspInit(CRC_HandleTypeDef* hcrc)
-{
-  if(hcrc->Instance==CRC)
-  {
-    /* USER CODE BEGIN CRC_MspInit 0 */
-
-    /* USER CODE END CRC_MspInit 0 */
-    /* Peripheral clock enable */
-    __HAL_RCC_CRC_CLK_ENABLE();
-    /* USER CODE BEGIN CRC_MspInit 1 */
-
-    /* USER CODE END CRC_MspInit 1 */
-
-  }
-
-}
-
-/**
-  * @brief CRC MSP De-Initialization
-  * This function freeze the hardware resources used in this example
-  * @param hcrc: CRC handle pointer
-  * @retval None
-  */
-void HAL_CRC_MspDeInit(CRC_HandleTypeDef* hcrc)
-{
-  if(hcrc->Instance==CRC)
-  {
-    /* USER CODE BEGIN CRC_MspDeInit 0 */
-
-    /* USER CODE END CRC_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_CRC_CLK_DISABLE();
-    /* USER CODE BEGIN CRC_MspDeInit 1 */
-
-    /* USER CODE END CRC_MspDeInit 1 */
-  }
-
 }
 
 /**
@@ -314,130 +266,6 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
     /* USER CODE BEGIN I2C2_MspDeInit 1 */
 
     /* USER CODE END I2C2_MspDeInit 1 */
-  }
-
-}
-
-/**
-  * @brief JPEG MSP Initialization
-  * This function configures the hardware resources used in this example
-  * @param hjpeg: JPEG handle pointer
-  * @retval None
-  */
-void HAL_JPEG_MspInit(JPEG_HandleTypeDef* hjpeg)
-{
-  DMA_IsolationConfigTypeDef IsolationConfiginput;
-  DMA_DataHandlingConfTypeDef DataHandlingConfig;
-  if(hjpeg->Instance==JPEG)
-  {
-    /* USER CODE BEGIN JPEG_MspInit 0 */
-
-    /* USER CODE END JPEG_MspInit 0 */
-    /* Peripheral clock enable */
-    __HAL_RCC_JPEG_CLK_ENABLE();
-
-    /* JPEG DMA Init */
-    /* HPDMA1_REQUEST_JPEG_TX Init */
-    handle_HPDMA1_Channel1.Instance = HPDMA1_Channel1;
-    handle_HPDMA1_Channel1.Init.Request = HPDMA1_REQUEST_JPEG_TX;
-    handle_HPDMA1_Channel1.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
-    handle_HPDMA1_Channel1.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    handle_HPDMA1_Channel1.Init.SrcInc = DMA_SINC_FIXED;
-    handle_HPDMA1_Channel1.Init.DestInc = DMA_DINC_INCREMENTED;
-    handle_HPDMA1_Channel1.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_WORD;
-    handle_HPDMA1_Channel1.Init.DestDataWidth = DMA_DEST_DATAWIDTH_WORD;
-    handle_HPDMA1_Channel1.Init.Priority = DMA_HIGH_PRIORITY;
-    handle_HPDMA1_Channel1.Init.SrcBurstLength = 8;
-    handle_HPDMA1_Channel1.Init.DestBurstLength = 8;
-    handle_HPDMA1_Channel1.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT1|DMA_DEST_ALLOCATED_PORT0;
-    handle_HPDMA1_Channel1.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
-    handle_HPDMA1_Channel1.Init.Mode = DMA_NORMAL;
-    if (HAL_DMA_Init(&handle_HPDMA1_Channel1) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    __HAL_LINKDMA(hjpeg, hdmaout, handle_HPDMA1_Channel1);
-
-    IsolationConfiginput.CidFiltering = DMA_ISOLATION_ON;
-    IsolationConfiginput.StaticCid = DMA_CHANNEL_STATIC_CID_1;
-    if (HAL_DMA_SetIsolationAttributes(&handle_HPDMA1_Channel1, &IsolationConfiginput) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    /* HPDMA1_REQUEST_JPEG_RX Init */
-    handle_HPDMA1_Channel0.Instance = HPDMA1_Channel0;
-    handle_HPDMA1_Channel0.Init.Request = HPDMA1_REQUEST_JPEG_RX;
-    handle_HPDMA1_Channel0.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
-    handle_HPDMA1_Channel0.Init.Direction = DMA_MEMORY_TO_PERIPH;
-    handle_HPDMA1_Channel0.Init.SrcInc = DMA_SINC_INCREMENTED;
-    handle_HPDMA1_Channel0.Init.DestInc = DMA_DINC_FIXED;
-    handle_HPDMA1_Channel0.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
-    handle_HPDMA1_Channel0.Init.DestDataWidth = DMA_DEST_DATAWIDTH_WORD;
-    handle_HPDMA1_Channel0.Init.Priority = DMA_HIGH_PRIORITY;
-    handle_HPDMA1_Channel0.Init.SrcBurstLength = 8;
-    handle_HPDMA1_Channel0.Init.DestBurstLength = 8;
-    handle_HPDMA1_Channel0.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0|DMA_DEST_ALLOCATED_PORT1;
-    handle_HPDMA1_Channel0.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
-    handle_HPDMA1_Channel0.Init.Mode = DMA_NORMAL;
-    if (HAL_DMA_Init(&handle_HPDMA1_Channel0) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    DataHandlingConfig.DataExchange = DMA_EXCHANGE_NONE;
-    DataHandlingConfig.DataAlignment = DMA_DATA_PACK;
-    if (HAL_DMAEx_ConfigDataHandling(&handle_HPDMA1_Channel0, &DataHandlingConfig) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    __HAL_LINKDMA(hjpeg, hdmain, handle_HPDMA1_Channel0);
-
-    IsolationConfiginput.CidFiltering = DMA_ISOLATION_ON;
-    IsolationConfiginput.StaticCid = DMA_CHANNEL_STATIC_CID_1;
-    if (HAL_DMA_SetIsolationAttributes(&handle_HPDMA1_Channel0, &IsolationConfiginput) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    /* JPEG interrupt Init */
-    HAL_NVIC_SetPriority(JPEG_IRQn, 8, 0);
-    HAL_NVIC_EnableIRQ(JPEG_IRQn);
-    /* USER CODE BEGIN JPEG_MspInit 1 */
-
-    /* USER CODE END JPEG_MspInit 1 */
-
-  }
-
-}
-
-/**
-  * @brief JPEG MSP De-Initialization
-  * This function freeze the hardware resources used in this example
-  * @param hjpeg: JPEG handle pointer
-  * @retval None
-  */
-void HAL_JPEG_MspDeInit(JPEG_HandleTypeDef* hjpeg)
-{
-  if(hjpeg->Instance==JPEG)
-  {
-    /* USER CODE BEGIN JPEG_MspDeInit 0 */
-
-    /* USER CODE END JPEG_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_JPEG_CLK_DISABLE();
-
-    /* JPEG DMA DeInit */
-    HAL_DMA_DeInit(hjpeg->hdmaout);
-    HAL_DMA_DeInit(hjpeg->hdmain);
-
-    /* JPEG interrupt DeInit */
-    HAL_NVIC_DisableIRQ(JPEG_IRQn);
-    /* USER CODE BEGIN JPEG_MspDeInit 1 */
-
-    /* USER CODE END JPEG_MspDeInit 1 */
   }
 
 }
