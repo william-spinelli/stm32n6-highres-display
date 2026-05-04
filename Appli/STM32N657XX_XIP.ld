@@ -70,7 +70,7 @@ SECTIONS
 {
   BufferSection (NOLOAD) :
   {
-    *(TouchGFX_Framebuffer TouchGFX_Framebuffer.*)
+    *(TouchGFX_Framebuffer TouchGFX_Framebuffer.* Framebuffer)
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
 
@@ -78,14 +78,14 @@ SECTIONS
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
   } >FB_RAM
-  
+
   UncachedSection (NOLOAD) :
   {
     *(Nemagfx_Memory_Pool_Buffer Nemagfx_Memory_Pool_Buffer.*)
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
   } >CMDLIST_RAM
-  
+
   FontFlashSection :
   {
     *(FontFlashSection FontFlashSection.*)
@@ -190,7 +190,7 @@ SECTIONS
     . = ALIGN(32);
     FILL(0x00);
   } >ROM
-  _eNSCVeneer = .; 
+  _eNSCVeneer = .;
 
   /* Uninitialized data section into "RAM" Ram type memory */
   _sidata = LOADADDR(.data);

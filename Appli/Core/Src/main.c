@@ -23,6 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -67,18 +69,24 @@ UART_HandleTypeDef huart1;
 #ifdef USE_RIVERDI_DISPLAY
   #define SCREEN_WIDTH 1280
   #define SCREEN_HEIGHT 800
+
+  extern const uint8_t sample_image_1280x800[];
+  #define sample_image sample_image_1280x800
+
 #else
   #define SCREEN_WIDTH 800
   #define SCREEN_HEIGHT 480
+
+  extern const uint8_t sample_image_800x480[];
+  #define sample_image sample_image_800x480
 #endif
 
 #define FRAMEBUFFER_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
 static uint8_t framebuffer[FRAMEBUFFER_SIZE] __attribute__((aligned(4))) __attribute__((section("Framebuffer")));
 
-
-void init_framebuffer(void)
+static void init_framebuffer(void)
 {
-  memset(framebuffer, 0x77, FRAMEBUFFER_SIZE);
+  memcpy(framebuffer, sample_image, FRAMEBUFFER_SIZE);
   // for (uint32_t i = 0; i < 2; ++i)
   // {
   //   for (int i = i + 1; j < FRAMEBUFFER_SIZE / 2; j += 2)
@@ -109,6 +117,43 @@ void init_framebuffer(void)
   //   HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin);
   // }
 }
+
+static void draw_cross(int16_t cx, int16_t cy, int16_t size, int16_t thickness)
+{
+  const uint16_t color = 0x0000;
+  uint16_t *fb = (uint16_t *)(void *)framebuffer;
+
+  int16_t half   = size / 2;
+  int16_t half_t = thickness / 2;
+
+  /* Horizontal bar */
+  int16_t x0 = cx - half,   x1 = cx + half;
+  int16_t y0 = cy - half_t, y1 = y0 + thickness;
+  if (x0 < 0) x0 = 0;
+  if (y0 < 0) y0 = 0;
+  if (x1 > SCREEN_WIDTH)  x1 = SCREEN_WIDTH;
+  if (y1 > SCREEN_HEIGHT) y1 = SCREEN_HEIGHT;
+  for (int16_t y = y0; y < y1; ++y) {
+    uint16_t *row = fb + (uint32_t)y * SCREEN_WIDTH;
+    for (int16_t x = x0; x < x1; ++x) row[x] = color;
+  }
+
+  /* Vertical bar */
+  x0 = cx - half_t; x1 = x0 + thickness;
+  y0 = cy - half;   y1 = cy + half;
+  if (x0 < 0) x0 = 0;
+  if (y0 < 0) y0 = 0;
+  if (x1 > SCREEN_WIDTH)  x1 = SCREEN_WIDTH;
+  if (y1 > SCREEN_HEIGHT) y1 = SCREEN_HEIGHT;
+  for (int16_t y = y0; y < y1; ++y) {
+    uint16_t *row = fb + (uint32_t)y * SCREEN_WIDTH;
+    for (int16_t x = x0; x < x1; ++x) row[x] = color;
+  }
+}
+
+
+void gt911_touchpad_read(bool *pressed, int16_t *x, int16_t *y);
+void ili2132_touchpad_read(void);
 
 /* USER CODE END PV */
 
@@ -221,8 +266,22 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_Delay(1000);
-    printf("Tock\n");
+    HAL_Delay(33);
+
+    bool pressed = false;
+    int16_t x = 0;
+    int16_t y = 0;
+  #ifdef USE_RIVERDI_DISPLAY
+    ili2132_touchpad_read();
+  #else
+    gt911_touchpad_read(&pressed, &x, &y);
+  #endif
+    if (pressed)
+      draw_cross(x, y, 30, 2);
+    else
+    {
+
+    }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
