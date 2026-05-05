@@ -67,6 +67,8 @@ typedef funcptr funcptr_NS;
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -75,8 +77,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LCD_BL_Pin GPIO_PIN_6
-#define LCD_BL_GPIO_Port GPIOQ
 #define MCU_ACTIVE_Pin GPIO_PIN_9
 #define MCU_ACTIVE_GPIO_Port GPIOE
 #define LCD_ON_OFF_Pin GPIO_PIN_3
