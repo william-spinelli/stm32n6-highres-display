@@ -230,7 +230,7 @@
 #endif
 
 /*Use TSi's aka (Think Silicon) NemaGFX */
-#define LV_USE_NEMA_GFX 0
+#define LV_USE_NEMA_GFX 1
 
 #if LV_USE_NEMA_GFX
     /** Select which NemaGFX static library headers to use. Possible options:
@@ -255,7 +255,7 @@
          * and define the section in the linker script if you need the GPU memory to
          * be, e.g. in a region where accesses will not be cached.
          */
-        #define LV_NEMA_STM32_HAL_ATTRIBUTE_POOL_MEM
+        #define LV_NEMA_STM32_HAL_ATTRIBUTE_POOL_MEM __attribute__((section("Nemagfx_Memory_Pool_Buffer")))
     #endif
 
     /*Enable Vector Graphics Operations. Available only if NemaVG library is present*/

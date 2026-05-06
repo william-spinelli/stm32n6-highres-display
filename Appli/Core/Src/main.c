@@ -111,12 +111,15 @@ int main(void)
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
-//  MPU_Config();
+  MPU_Config();
 
   /* Enable the CPU Cache */
 
   /* Enable I-Cache---------------------------------------------------------*/
   SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
   HAL_Init();
@@ -142,7 +145,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   tft_init();
   touchpad_init();
-  lv_demo_widgets();
+  lv_demo_benchmark();
 
   /* USER CODE END 2 */
 
@@ -791,10 +794,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM2)
   {
     HAL_IncTick();
-    lv_tick_inc(1);
   }
   /* USER CODE BEGIN Callback 1 */
-
+  if (htim->Instance == TIM2)
+  {
+    lv_tick_inc(1);
+  }
   /* USER CODE END Callback 1 */
 }
 
