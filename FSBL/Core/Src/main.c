@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "tft.h"
 
 /* USER CODE END Includes */
 
@@ -92,7 +93,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -219,10 +220,17 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL4.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL4.PLLM = 6;
+#ifdef USE_RIVERDI_DISPLAY
+  RCC_OscInitStruct.PLL4.PLLN = 145;
+  RCC_OscInitStruct.PLL4.PLLFractional = 0;
+  RCC_OscInitStruct.PLL4.PLLP1 = 4;
+  RCC_OscInitStruct.PLL4.PLLP2 = 1;
+#else
   RCC_OscInitStruct.PLL4.PLLN = 250;
   RCC_OscInitStruct.PLL4.PLLFractional = 0;
   RCC_OscInitStruct.PLL4.PLLP1 = 2;
   RCC_OscInitStruct.PLL4.PLLP2 = 1;
+#endif
 
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {

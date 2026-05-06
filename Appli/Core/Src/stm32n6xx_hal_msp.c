@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 /* USER CODE BEGIN Includes */
+#include "hal_stm_lvgl/tft.h"
 
 /* USER CODE END Includes */
 
@@ -290,8 +291,13 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* hltdc)
   */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
     PeriphClkInitStruct.LtdcClockSelection = RCC_LTDCCLKSOURCE_IC16;
+#ifdef USE_RIVERDI_DISPLAY
+    PeriphClkInitStruct.ICSelection[RCC_IC16].ClockSelection = RCC_ICCLKSOURCE_PLL4;
+    PeriphClkInitStruct.ICSelection[RCC_IC16].ClockDivider = 4;
+#else
     PeriphClkInitStruct.ICSelection[RCC_IC16].ClockSelection = RCC_ICCLKSOURCE_PLL2;
     PeriphClkInitStruct.ICSelection[RCC_IC16].ClockDivider = 24;
+#endif
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
       Error_Handler();

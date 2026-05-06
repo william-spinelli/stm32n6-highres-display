@@ -327,6 +327,16 @@ static void MX_LTDC_Init(void)
   hltdc.Init.VSPolarity = LTDC_VSPOLARITY_AL;
   hltdc.Init.DEPolarity = LTDC_DEPOLARITY_AL;
   hltdc.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
+#ifdef USE_RIVERDI_DISPLAY
+  hltdc.Init.HorizontalSync = 0;
+  hltdc.Init.VerticalSync = 0;
+  hltdc.Init.AccumulatedHBP = 88;
+  hltdc.Init.AccumulatedVBP = 23;
+  hltdc.Init.AccumulatedActiveW = 1368;
+  hltdc.Init.AccumulatedActiveH = 823;
+  hltdc.Init.TotalWidth = 1440;
+  hltdc.Init.TotalHeigh = 838;
+#else
   hltdc.Init.HorizontalSync = 4;
   hltdc.Init.VerticalSync = 4;
   hltdc.Init.AccumulatedHBP = 12;
@@ -335,6 +345,7 @@ static void MX_LTDC_Init(void)
   hltdc.Init.AccumulatedActiveH = 492;
   hltdc.Init.TotalWidth = 820;
   hltdc.Init.TotalHeigh = 506;
+#endif
   hltdc.Init.Backcolor.Blue = 0;
   hltdc.Init.Backcolor.Green = 0;
   hltdc.Init.Backcolor.Red = 0;
@@ -342,18 +353,30 @@ static void MX_LTDC_Init(void)
   {
     Error_Handler();
   }
+#ifdef USE_RIVERDI_DISPLAY
+  pLayerCfg.WindowX0 = 0;
+  pLayerCfg.WindowX1 = 1280;
+  pLayerCfg.WindowY0 = 0;
+  pLayerCfg.WindowY1 = 800;
+#else
   pLayerCfg.WindowX0 = 0;
   pLayerCfg.WindowX1 = 800;
   pLayerCfg.WindowY0 = 0;
   pLayerCfg.WindowY1 = 480;
+#endif
   pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
   pLayerCfg.Alpha = 255;
   pLayerCfg.Alpha0 = 0;
   pLayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_CA;
   pLayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_CA;
   pLayerCfg.FBStartAdress = 0;
+#ifdef USE_RIVERDI_DISPLAY
+  pLayerCfg.ImageWidth = 1280;
+  pLayerCfg.ImageHeight = 800;
+#else
   pLayerCfg.ImageWidth = 800;
   pLayerCfg.ImageHeight = 480;
+#endif
   pLayerCfg.Backcolor.Blue = 0;
   pLayerCfg.Backcolor.Green = 0;
   pLayerCfg.Backcolor.Red = 0;
