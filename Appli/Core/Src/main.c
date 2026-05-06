@@ -764,6 +764,17 @@ void MPU_Config(void)
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
+  /** Initializes and configures the Region 3 and the memory to be protected
+  */
+  MPU_InitStruct.Number = MPU_REGION_NUMBER3;
+  MPU_InitStruct.BaseAddress = 0x90000000;
+  MPU_InitStruct.LimitAddress = 0x90FFFFFF;
+  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER3;
+  MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RW;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
   /** Initializes and configures the Attribute 0 and the memory to be protected
   */
   MPU_AttributesInit.Number = MPU_ATTRIBUTES_NUMBER0;

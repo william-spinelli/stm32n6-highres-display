@@ -44,6 +44,7 @@ MEMORY
   RAM            (xrw)    : ORIGIN = 0x34000000,   LENGTH = 0x00032000
   CMDLIST_RAM    (xrw)    : ORIGIN = 0x34032000,   LENGTH = 0x00006000
   FB_RAM         (xrw)    : ORIGIN = 0x34038000,   LENGTH = 0x003E8000
+  PSRAM          (rw)     : ORIGIN = 0x90000000,   LENGTH = 0x02000000
   ROM            (xr)     : ORIGIN = 0x70100400,   LENGTH = 0x01000000
 }
 /*
@@ -88,6 +89,7 @@ SECTIONS
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
   } >FB_RAM
+  /* } >PSRAM */
 
   UncachedSection (NOLOAD) :
   {

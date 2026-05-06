@@ -31,6 +31,7 @@ EWARM/FSBL/*.ewt
 STM32CubeIDE/.settings/
 STM32CubeIDE/Appli*/.settings/
 STM32CubeIDE/Appli*/Debug/
+STM32CubeIDE/Appli*/Debug_Optimized/
 STM32CubeIDE/Appli*/Release/
 STM32CubeIDE/FSBL/.settings/
 STM32CubeIDE/FSBL/Debug/
