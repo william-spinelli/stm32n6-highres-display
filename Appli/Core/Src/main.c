@@ -73,12 +73,14 @@ UART_HandleTypeDef huart1;
   #define sample_image sample_image_800x480
 #endif
 
-#define FRAMEBUFFER_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
-static uint8_t framebuffer[FRAMEBUFFER_SIZE] __attribute__((aligned(4))) __attribute__((section("Framebuffer")));
+#define FRAMEBUFFER_WIDTH 1280
+#define FRAMEBUFFER_HEIGHT 800
+#define FRAMEBUFFER_SIZE (FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT * 2)
+static uint8_t framebuffer[2][FRAMEBUFFER_SIZE] __attribute__((aligned(4))) __attribute__((section("Framebuffer")));
 
 static void init_framebuffer(void)
 {
-  memcpy(framebuffer, sample_image, FRAMEBUFFER_SIZE);
+  memcpy(framebuffer, sample_image, SCREEN_WIDTH * SCREEN_HEIGHT * 2);
   HAL_LTDC_SetAddress_NoReload(&hltdc, (uint32_t)(uintptr_t)framebuffer, 0);
   HAL_LTDC_Reload(&hltdc, LTDC_RELOAD_VERTICAL_BLANKING);
 }
@@ -773,8 +775,8 @@ void MPU_Config(void)
   */
   MPU_InitStruct.Enable = MPU_REGION_ENABLE;
   MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-  MPU_InitStruct.BaseAddress = 0x34140000;
-  MPU_InitStruct.LimitAddress = 0x34145FFF;
+  MPU_InitStruct.BaseAddress = 0x34032000;
+  MPU_InitStruct.LimitAddress = 0x34037FFF;
   MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER3;
   MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RW;
   MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
@@ -786,7 +788,7 @@ void MPU_Config(void)
   /** Initializes and configures the Region 1 and the memory to be protected
   */
   MPU_InitStruct.Number = MPU_REGION_NUMBER1;
-  MPU_InitStruct.BaseAddress = 0x34146000;
+  MPU_InitStruct.BaseAddress = 0x34038000;
   MPU_InitStruct.LimitAddress = 0x3441FFFF;
   MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER2;
 
@@ -796,30 +798,9 @@ void MPU_Config(void)
   */
   MPU_InitStruct.Number = MPU_REGION_NUMBER2;
   MPU_InitStruct.BaseAddress = 0x70100400;
-  MPU_InitStruct.LimitAddress = 0x701FFFFF;
+  MPU_InitStruct.LimitAddress = 0x711003FF;
   MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER1;
   MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
-  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
-
-  HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
-  /** Initializes and configures the Region 3 and the memory to be protected
-  */
-  MPU_InitStruct.Number = MPU_REGION_NUMBER3;
-  MPU_InitStruct.BaseAddress = 0x70200000;
-  MPU_InitStruct.LimitAddress = 0x77FFFFFF;
-  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER0;
-  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
-
-  HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
-  /** Initializes and configures the Region 4 and the memory to be protected
-  */
-  MPU_InitStruct.Number = MPU_REGION_NUMBER4;
-  MPU_InitStruct.BaseAddress = 0x34000400;
-  MPU_InitStruct.LimitAddress = 0x340FFFFF;
-  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER1;
-  MPU_InitStruct.AccessPermission = MPU_REGION_PRIV_RO;
   MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);

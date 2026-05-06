@@ -41,6 +41,15 @@ _Min_Stack_Size = 0x1000; /* required amount of stack */
 MEMORY
 {
   DTCM_RAM       (xrw)    : ORIGIN = 0x30000000,   LENGTH = 0x00020000
+  RAM            (xrw)    : ORIGIN = 0x34000000,   LENGTH = 0x00032000
+  CMDLIST_RAM    (xrw)    : ORIGIN = 0x34032000,   LENGTH = 0x00006000
+  FB_RAM         (xrw)    : ORIGIN = 0x34038000,   LENGTH = 0x003E8000
+  ROM            (xr)     : ORIGIN = 0x70100400,   LENGTH = 0x01000000
+}
+/*
+MEMORY
+{
+  DTCM_RAM       (xrw)    : ORIGIN = 0x30000000,   LENGTH = 0x00020000
   LRUN_APPLI_RAM (xr)     : ORIGIN = 0x34000400,   LENGTH = 0x000FFC00
   RAM            (xrw)    : ORIGIN = 0x34100000,   LENGTH = 0x00040000
   CMDLIST_RAM    (xrw)    : ORIGIN = 0x34140000,   LENGTH = 0x00006000
@@ -49,6 +58,7 @@ MEMORY
   ROM            (xr)     : ORIGIN = 0x70100400,   LENGTH = 0x000FFC00
   ASSETS_ROM     (r)      : ORIGIN = 0x70200000,   LENGTH = 0x07E00000
 }
+*/
 /* Highest address of the user mode stack */
 _estack = ORIGIN(RAM) + LENGTH(RAM); /* end of "RAM" Ram type memory */
 _sstack = _estack - _Min_Stack_Size;
@@ -85,27 +95,6 @@ SECTIONS
     *(.gnu.linkonce.r.*)
     . = ALIGN(0x8);
   } >CMDLIST_RAM
-
-  FontFlashSection :
-  {
-    *(FontFlashSection FontFlashSection.*)
-    *(.gnu.linkonce.r.*)
-    . = ALIGN(0x4);
-  } >ASSETS_ROM
-
-  TextFlashSection :
-  {
-    *(TextFlashSection TextFlashSection.*)
-    *(.gnu.linkonce.r.*)
-    . = ALIGN(0x4);
-  } >ASSETS_ROM
-
-  ExtFlashSection :
-  {
-    *(ExtFlashSection ExtFlashSection.*)
-    *(.gnu.linkonce.r.*)
-    . = ALIGN(0x4);
-  } >ASSETS_ROM
 }
 
 /* Sections */

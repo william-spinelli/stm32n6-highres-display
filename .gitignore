@@ -46,3 +46,6 @@ build/*
 Appli*/build/
 FSBL/build/
 
+test/*
+test-riverdi/*
+
