@@ -47,8 +47,6 @@
 									<listOptionValue builtIn="false" value="../../../Middlewares/ST/STM32_ExtMem_Manager/psram"/>
 									<listOptionValue builtIn="false" value="../../../Middlewares/ST/STM32_ExtMem_Manager/sdcard"/>
 									<listOptionValue builtIn="false" value="../../../Middlewares/ST/STM32_ExtMem_Manager/user"/>
-									<listOptionValue builtIn="false" value="../../../Middlewares/ST/threadx/common/inc"/>
-									<listOptionValue builtIn="false" value="../../../Middlewares/ST/threadx/ports/cortex_m55/gnu/inc"/>
 									<listOptionValue builtIn="false" value="../../../Drivers/CMSIS/Include"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.1722497227" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
