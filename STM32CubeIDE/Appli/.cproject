@@ -107,6 +107,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="lvgl|resources" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="tests/|src/libs/|src/draw/sw/blend/helium/|src/drivers/display/drm/|src/drivers/display/fb/|src/drivers/display/ft81x/|src/drivers/display/ili9341/|src/drivers/display/lcd/|src/drivers/display/lovyan_gfx/|src/drivers/display/nv3007/|src/drivers/display/nxp_elcdif/|src/drivers/display/renesas_glcdc/|src/drivers/display/st7735/|src/drivers/display/st7789/|src/drivers/display/st7796/|src/drivers/display/tft_espi/|src/debugging/vg_lite_tvg/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="lvgl"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="resources"/>
 					</sourceEntries>
 				</configuration>
