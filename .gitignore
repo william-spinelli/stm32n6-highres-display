@@ -50,3 +50,5 @@ FSBL/build/
 test/*
 test-riverdi/*
 
+squareline/backup/*
+

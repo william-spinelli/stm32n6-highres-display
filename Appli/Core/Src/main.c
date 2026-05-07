@@ -29,6 +29,7 @@
 #include "lvgl/demos/lv_demos.h"
 #include "hal_stm_lvgl/tft.h"
 #include "hal_stm_lvgl/touchpad.h"
+#include "squareline-generated/ui.h"
 
 /* USER CODE END Includes */
 
@@ -145,7 +146,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
   tft_init();
   touchpad_init();
-  lv_demo_benchmark();
+
+  // lv_demo_benchmark();
+  ui_init();
 
   /* USER CODE END 2 */
 
