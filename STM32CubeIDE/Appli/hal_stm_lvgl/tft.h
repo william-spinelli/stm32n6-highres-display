@@ -1,6 +1,6 @@
 #pragma once
 
-//#define USE_RIVERDI_DISPLAY
+#define USE_RIVERDI_DISPLAY
 
 #ifdef USE_RIVERDI_DISPLAY
 #define TFT_HOR_RES 1280
