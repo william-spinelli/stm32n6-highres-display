@@ -2,8 +2,8 @@
 setlocal
 
 set "CUBEPROGRAMMER_TOOL_PATH=C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin"
-set "BIN_DIR=%~pd0..\..\..\STM32CubeIDE\FSBL\Debug_Optimized\"
-set "OUT_DIR=%~pd0..\..\..\STM32CubeIDE\FSBL\Debug_Optimized\"
+set "BIN_DIR=%~pd0..\..\..\STM32CubeIDE\FSBL\Debug\"
+set "OUT_DIR=%~pd0..\..\..\STM32CubeIDE\FSBL\Debug\"
 
 :: Check if STM32CubeProgrammer is found
 if not exist "%CUBEPROGRAMMER_TOOL_PATH%" (

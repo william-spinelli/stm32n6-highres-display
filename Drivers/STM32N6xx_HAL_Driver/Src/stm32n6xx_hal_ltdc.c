@@ -528,10 +528,19 @@ HAL_StatusTypeDef HAL_LTDC_RegisterCallback(LTDC_HandleTypeDef *hltdc, HAL_LTDC_
   }
   else
   {
-    /* Update the error code */
-    hltdc->ErrorCode |= HAL_LTDC_ERROR_INVALID_CALLBACK;
-    /* Return error status */
-    status =  HAL_ERROR;
+    switch (CallbackID)
+    {
+      case HAL_LTDC_RELOAD_EVENT_CB_ID :
+        hltdc->ReloadEventCallback = pCallback;
+        break;
+
+        default :
+        /* Update the error code */
+        hltdc->ErrorCode |= HAL_LTDC_ERROR_INVALID_CALLBACK;
+        /* Return error status */
+        status =  HAL_ERROR;
+        break;
+    }
   }
 
   /* Release Lock */
