@@ -736,7 +736,7 @@ void MPU_Config(void)
   MPU_InitStruct.Number = MPU_REGION_NUMBER0;
   MPU_InitStruct.BaseAddress = 0x34032000;
   MPU_InitStruct.LimitAddress = 0x34037FFF;
-  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER3;
+  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER2;
   MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RW;
   MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
   MPU_InitStruct.DisablePrivExec = MPU_PRIV_INSTRUCTION_ACCESS_ENABLE;
@@ -749,7 +749,6 @@ void MPU_Config(void)
   MPU_InitStruct.Number = MPU_REGION_NUMBER1;
   MPU_InitStruct.BaseAddress = 0x34038000;
   MPU_InitStruct.LimitAddress = 0x3441FFFF;
-  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER2;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
@@ -772,6 +771,15 @@ void MPU_Config(void)
   MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER3;
   MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RW;
   MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /** Initializes and configures the Region 4 and the memory to be protected
+  */
+  MPU_InitStruct.Number = MPU_REGION_NUMBER4;
+  MPU_InitStruct.BaseAddress = 0x30000000;
+  MPU_InitStruct.LimitAddress = 0x3001FFFF;
+  MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER2;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
 

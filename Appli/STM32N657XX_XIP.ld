@@ -33,8 +33,8 @@
 
 /* Entry Point */
 ENTRY(Reset_Handler)
-_Min_Heap_Size = 0x1000;      /* required amount of heap  */
-_Min_Stack_Size = 0x10000; /* required amount of stack */
+_Min_Heap_Size = 0;      /* required amount of heap  */
+_Min_Stack_Size = 0x20000; /* required amount of stack */
 
 
 /* Memories definition */
@@ -281,7 +281,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
-  } >RAM
+  } >DTCM_RAM
 
   /* Remove information from the compiler libraries */
   /DISCARD/ :
